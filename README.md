@@ -5,11 +5,11 @@ Package mmap provides a way to memory-map a file.
 
 ### Install
 ```
-go get hslam.com/git/x/mmap
+go get github.com/hslam/mmap
 ```
 ### Import
 ```
-import "hslam.com/git/x/mmap"
+import "github.com/hslam/mmap"
 ```
 ### Usage
 #### Example
@@ -18,7 +18,7 @@ package main
 
 import (
 	"fmt"
-	"hslam.com/git/x/mmap"
+	"github.com/hslam/mmap"
 	"os"
 )
 
