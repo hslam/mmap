@@ -4,12 +4,6 @@ import (
 	"os"
 )
 
-const (
-	PROT_READ  = 0x1
-	PROT_WRITE = 0x2
-	MAP_SHARED = 0x1
-)
-
 func Fd(f *os.File) int {
 	return int(f.Fd())
 }
@@ -28,5 +22,5 @@ func Msync(b []byte) (err error) {
 }
 
 func Munmap(b []byte) (err error) {
-	return msync(b)
+	return munmap(b)
 }

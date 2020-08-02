@@ -1,9 +1,17 @@
 // +build darwin linux
+
 package mmap
 
 import (
 	"syscall"
 	"unsafe"
+)
+
+const (
+	PROT_READ  = syscall.PROT_READ
+	PROT_WRITE = syscall.PROT_WRITE
+
+	MAP_SHARED = syscall.MAP_SHARED
 )
 
 func mmap(fd int, offset int64, length int, prot int, flags int) (data []byte, err error) {
