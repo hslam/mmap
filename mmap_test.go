@@ -1,5 +1,3 @@
-// +build windows
-
 package mmap
 
 import (
@@ -18,7 +16,11 @@ func TestMmap(t *testing.T) {
 	size := 11
 	file.Truncate(int64(size))
 	file.Sync()
-	b, err := Mmap(int(file.Fd()), 0, size, PAGE_READWRITE, FILE_MAP_WRITE)
+	if Fsize(file) != size {
+		t.Errorf("%d != %d", Fsize(file), size)
+	}
+	prot, flags := ProtFlags(READWRITE)
+	b, err := Mmap(Fd(file), 0, Fsize(file), prot, flags)
 	if err != nil {
 		t.Error(err)
 	}
@@ -51,7 +53,8 @@ func BenchmarkMmap(b *testing.B) {
 	size := 11
 	file.Truncate(int64(size))
 	file.Sync()
-	d, err := Mmap(int(file.Fd()), 0, size, PAGE_READWRITE, FILE_MAP_WRITE)
+	prot, flags := ProtFlags(READWRITE)
+	d, err := Mmap(Fd(file), 0, Fsize(file), prot, flags)
 	if err != nil {
 		b.Error(err)
 	}

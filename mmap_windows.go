@@ -22,6 +22,24 @@ const (
 	FILE_MAP_EXECUTE = syscall.FILE_MAP_EXECUTE
 )
 
+func protFlags(p PROT) (prot int, flags int) {
+	prot = PAGE_READONLY
+	flags = FILE_MAP_READ
+	if p&READWRITE != 0 {
+		prot = PAGE_READWRITE
+		flags = FILE_MAP_WRITE
+	}
+	if p&COPY != 0 {
+		prot = PAGE_WRITECOPY
+		flags = FILE_MAP_COPY
+	}
+	if p&EXEC != 0 {
+		prot <<= 4
+		flags |= FILE_MAP_EXECUTE
+	}
+	return
+}
+
 type mmapper struct {
 	sync.Mutex
 	active map[*byte][]byte

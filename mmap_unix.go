@@ -10,9 +10,28 @@ import (
 const (
 	PROT_READ  = syscall.PROT_READ
 	PROT_WRITE = syscall.PROT_WRITE
+	PROT_EXEC  = syscall.PROT_EXEC
 
-	MAP_SHARED = syscall.MAP_SHARED
+	MAP_SHARED  = syscall.MAP_SHARED
+	MAP_PRIVATE = syscall.MAP_PRIVATE
+	MAP_COPY    = MAP_PRIVATE
 )
+
+func protFlags(p PROT) (prot int, flags int) {
+	prot = PROT_READ
+	flags = MAP_SHARED
+	if p&READWRITE != 0 {
+		prot |= PROT_WRITE
+	}
+	if p&COPY != 0 {
+		prot |= PROT_WRITE
+		flags = MAP_COPY
+	}
+	if p&EXEC != 0 {
+		prot |= PROT_EXEC
+	}
+	return
+}
 
 func mmap(fd int, offset int64, length int, prot int, flags int) (data []byte, err error) {
 	return syscall.Mmap(fd, offset, length, prot, flags)
