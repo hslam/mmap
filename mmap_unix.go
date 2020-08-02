@@ -24,7 +24,6 @@ func protFlags(p PROT) (prot int, flags int) {
 		prot |= PROT_WRITE
 	}
 	if p&COPY != 0 {
-		prot |= PROT_WRITE
 		flags = MAP_COPY
 	}
 	if p&EXEC != 0 {
