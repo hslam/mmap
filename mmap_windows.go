@@ -25,7 +25,7 @@ const (
 func protFlags(p PROT) (prot int, flags int) {
 	prot = PAGE_READONLY
 	flags = FILE_MAP_READ
-	if p&READWRITE != 0 {
+	if p&WRITE != 0 {
 		prot = PAGE_READWRITE
 		flags = FILE_MAP_WRITE
 	}

@@ -19,7 +19,7 @@ func TestMmap(t *testing.T) {
 	if Fsize(file) != size {
 		t.Errorf("%d != %d", Fsize(file), size)
 	}
-	prot, flags := ProtFlags(READWRITE)
+	prot, flags := ProtFlags(READ | WRITE)
 	b, err := Mmap(Fd(file), 0, Fsize(file), prot, flags)
 	if err != nil {
 		t.Error(err)
@@ -53,7 +53,7 @@ func BenchmarkMmap(b *testing.B) {
 	size := 11
 	file.Truncate(int64(size))
 	file.Sync()
-	prot, flags := ProtFlags(READWRITE)
+	prot, flags := ProtFlags(READ | WRITE)
 	d, err := Mmap(Fd(file), 0, Fsize(file), prot, flags)
 	if err != nil {
 		b.Error(err)

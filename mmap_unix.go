@@ -20,7 +20,7 @@ const (
 func protFlags(p PROT) (prot int, flags int) {
 	prot = PROT_READ
 	flags = MAP_SHARED
-	if p&READWRITE != 0 {
+	if p&WRITE != 0 {
 		prot |= PROT_WRITE
 	}
 	if p&COPY != 0 {

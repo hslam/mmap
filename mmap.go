@@ -7,8 +7,8 @@ import (
 type PROT int
 
 const (
-	READONLY PROT = 1 << iota
-	READWRITE
+	READ PROT = 1 << iota
+	WRITE
 	COPY
 	EXEC
 )
