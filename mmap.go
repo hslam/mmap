@@ -28,6 +28,11 @@ func ProtFlags(p PROT) (prot int, flags int) {
 	return protFlags(p)
 }
 
+func Open(fd int, length int, p PROT) (data []byte, err error) {
+	prot, flags := protFlags(p)
+	return mmap(fd, 0, length, prot, flags)
+}
+
 func Mmap(fd int, offset int64, length int, prot int, flags int) (data []byte, err error) {
 	return mmap(fd, offset, length, prot, flags)
 }
