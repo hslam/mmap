@@ -26,32 +26,28 @@ func main() {
 	name := "mmap"
 	file, err := os.Create(name)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 	defer os.Remove(name)
 	defer file.Close()
-	size := 11
-	file.Truncate(int64(size))
+	str := "Hello world"
+	length := len(str)
+	file.Truncate(int64(length))
 	file.Sync()
 	prot, flags := mmap.ProtFlags(mmap.READ | mmap.WRITE)
-	b, err := mmap.Mmap(int(file.Fd()), 0, size, prot, flags)
+	b, err := mmap.Mmap(int(file.Fd()), 0, length, prot, flags)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
-	str := "Hello world"
 	copy(b, []byte(str))
-	if err := mmap.Msync(b); err != nil {
-		fmt.Println(err)
-	}
+	mmap.Msync(b)
+	mmap.Munmap(b)
 	file.Sync()
-	buf := make([]byte, size)
+	buf := make([]byte, length)
 	if n, err := file.Read(buf); err != nil {
 		fmt.Println(err)
 	} else {
 		fmt.Println(string(buf[:n]))
-	}
-	if err := mmap.Munmap(b); err != nil {
-		fmt.Println(err)
 	}
 }
 ```
