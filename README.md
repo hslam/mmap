@@ -34,8 +34,7 @@ func main() {
 	length := len(str)
 	file.Truncate(int64(length))
 	file.Sync()
-	prot, flags := mmap.ProtFlags(mmap.READ | mmap.WRITE)
-	b, err := mmap.Mmap(int(file.Fd()), 0, length, prot, flags)
+	b, err := mmap.Open(int(file.Fd()), length, mmap.READ|mmap.WRITE)
 	if err != nil {
 		panic(err)
 	}
