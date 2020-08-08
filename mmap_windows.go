@@ -49,12 +49,12 @@ func (m *mmapper) Mmap(fd int, offset int64, length int, prot int, flags int) (d
 	if length <= 0 {
 		return nil, syscall.EINVAL
 	}
-	handle, err := syscall.CreateFileMapping(syscall.Handle(fd), nil, uint32(prot), 0, uint32(length), nil)
+	handle, err := syscall.CreateFileMapping(syscall.Handle(fd), nil, uint32(prot), uint32((offset+int64(length))>>32), uint32((offset+int64(length))&0xFFFFFFFF), nil)
 	if err != nil {
 		return nil, err
 	}
 
-	addr, err := syscall.MapViewOfFile(handle, uint32(flags), 0, 0, uintptr(length))
+	addr, err := syscall.MapViewOfFile(handle, uint32(flags), uint32(offset>>32), uint32(offset&0xFFFFFFFF), uintptr(length))
 	if err != nil {
 		return nil, err
 	}
