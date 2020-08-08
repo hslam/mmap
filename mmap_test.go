@@ -13,30 +13,27 @@ func TestMmap(t *testing.T) {
 	}
 	defer os.Remove(name)
 	defer file.Close()
+	offset := int64(os.Getpagesize() * 4)
 	size := 11
-	file.Truncate(int64(size))
+	file.Truncate(int64(size) + offset)
 	file.Sync()
-	if Fsize(file) != size {
-		t.Errorf("%d != %d", Fsize(file), size)
-	}
 	prot, flags := ProtFlags(READ | WRITE)
-	b, err := Mmap(Fd(file), 0, Fsize(file), prot, flags)
+	m, err := Mmap(Fd(file), offset, size, prot, flags)
 	if err != nil {
 		t.Error(err)
 	}
 	str := "Hello world"
-	copy(b, []byte(str))
-	if err := Msync(b); err != nil {
+	copy(m, []byte(str))
+	if err := Msync(m); err != nil {
 		t.Error(err)
 	}
 	buf := make([]byte, size)
-	if _, err := file.Read(buf); err != nil {
-		t.Error(err)
-	}
+	file.Seek(offset, os.SEEK_SET)
+	file.Read(buf)
 	if str != string(buf) {
 		t.Errorf("%s!=%s", str, string(buf))
 	}
-	if err := Munmap(b); err != nil {
+	if err := Munmap(m); err != nil {
 		t.Error(err)
 	}
 	file.Sync()
@@ -53,17 +50,17 @@ func BenchmarkMmap(b *testing.B) {
 	size := 11
 	file.Truncate(int64(size))
 	file.Sync()
-	d, err := Open(Fd(file), Fsize(file), READ|WRITE)
+	m, err := Open(Fd(file), 0, Fsize(file), READ|WRITE)
 	if err != nil {
 		b.Error(err)
 	}
 	str := "Hello world"
 	for i := 0; i < b.N; i++ {
-		copy(d, []byte(str))
-		Msync(d)
+		copy(m, []byte(str))
+		Msync(m)
 		file.Sync()
 	}
-	if err := Munmap(d); err != nil {
+	if err := Munmap(m); err != nil {
 		b.Error(err)
 	}
 }
