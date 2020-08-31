@@ -23,8 +23,9 @@ type mmapper struct {
 }
 
 type f struct {
-	fd  int
-	buf []byte
+	fd     int
+	offset int64
+	buf    []byte
 }
 
 func (m *mmapper) Mmap(fd int, offset int64, length int, prot int, flags int) (data []byte, err error) {
@@ -51,7 +52,7 @@ func (m *mmapper) Mmap(fd int, offset int64, length int, prot int, flags int) (d
 	p := &b[cap(b)-1]
 	m.Lock()
 	defer m.Unlock()
-	m.active[p] = &f{fd, b}
+	m.active[p] = &f{fd, offset, b}
 	return b, nil
 }
 
@@ -67,7 +68,7 @@ func (m *mmapper) Msync(b []byte) (err error) {
 		return syscall.EINVAL
 	}
 	cursor, _ := syscall.Seek(f.fd, 0, os.SEEK_CUR)
-	syscall.Seek(f.fd, 0, os.SEEK_SET)
+	syscall.Seek(f.fd, f.offset, os.SEEK_SET)
 	_, err = syscall.Write(f.fd, b)
 	syscall.Seek(f.fd, cursor, os.SEEK_SET)
 	return err
