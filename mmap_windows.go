@@ -84,6 +84,13 @@ func (m *mmapper) Msync(b []byte) (err error) {
 		len  int
 		cap  int
 	})(unsafe.Pointer(&b))
+	p := &b[cap(b)-1]
+	m.Lock()
+	data := m.active[p]
+	m.Unlock()
+	if data == nil || &b[0] != &data[0] {
+		return syscall.EINVAL
+	}
 	return syscall.FlushViewOfFile(slice.addr, uintptr(slice.len))
 }
 
@@ -93,8 +100,8 @@ func (m *mmapper) Munmap(data []byte) (err error) {
 	}
 	p := &data[cap(data)-1]
 	m.Lock()
-	defer m.Unlock()
 	b := m.active[p]
+	m.Unlock()
 	if b == nil || &b[0] != &data[0] {
 		return syscall.EINVAL
 	}
@@ -102,7 +109,9 @@ func (m *mmapper) Munmap(data []byte) (err error) {
 	if err != nil {
 		return err
 	}
+	m.Lock()
 	delete(m.active, p)
+	m.Unlock()
 	return nil
 }
 
