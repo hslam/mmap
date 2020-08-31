@@ -64,7 +64,7 @@ func (m *mmapper) Msync(b []byte) (err error) {
 	m.Lock()
 	defer m.Unlock()
 	f := m.active[p]
-	if f.buf == nil || &f.buf[0] != &b[0] {
+	if f == nil || f.buf == nil || &f.buf[0] != &b[0] {
 		return syscall.EINVAL
 	}
 	cursor, _ := syscall.Seek(f.fd, 0, os.SEEK_CUR)
@@ -82,7 +82,7 @@ func (m *mmapper) Munmap(data []byte) (err error) {
 	m.Lock()
 	defer m.Unlock()
 	f := m.active[p]
-	if f.buf == nil || &f.buf[0] != &data[0] {
+	if f == nil || f.buf == nil || &f.buf[0] != &data[0] {
 		return syscall.EINVAL
 	}
 	cursor, _ := syscall.Seek(f.fd, 0, os.SEEK_CUR)
