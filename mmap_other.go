@@ -33,7 +33,7 @@ func (m *mmapper) Mmap(fd int, offset int64, length int, prot int, flags int) (d
 	}
 	buf := make([]byte, length)
 	cursor, _ := syscall.Seek(fd, 0, os.SEEK_CUR)
-	syscall.Seek(fd, 0, os.SEEK_SET)
+	syscall.Seek(fd, offset, os.SEEK_SET)
 	n, err := syscall.Read(fd, buf)
 	syscall.Seek(fd, cursor, os.SEEK_SET)
 	if err != nil {
