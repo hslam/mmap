@@ -25,7 +25,7 @@ const (
 	FILE_MAP_EXECUTE = syscall.FILE_MAP_EXECUTE
 )
 
-func protFlags(p PROT) (prot int, flags int) {
+func protFlags(p Prot) (prot int, flags int) {
 	prot = PAGE_READONLY
 	flags = FILE_MAP_READ
 	if p&WRITE != 0 {

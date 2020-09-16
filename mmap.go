@@ -8,12 +8,12 @@ import (
 	"os"
 )
 
-// PROT is the prot.
-type PROT int
+// Prot is the protection flag.
+type Prot int
 
 const (
 	// READ represents the read prot
-	READ PROT = 1 << iota
+	READ Prot = 1 << iota
 	// WRITE represents the write prot
 	WRITE
 	// COPY represents the copy prot
@@ -36,8 +36,8 @@ func Fsize(f *os.File) int {
 	return int(ret)
 }
 
-// ProtFlags returns prot and flags by PROT p.
-func ProtFlags(p PROT) (prot int, flags int) {
+// ProtFlags returns prot and flags by Prot p.
+func ProtFlags(p Prot) (prot int, flags int) {
 	return protFlags(p)
 }
 
@@ -48,9 +48,9 @@ func Offset(offset int64) int64 {
 }
 
 // Open opens a mmap
-func Open(fd int, offset int64, length int, p PROT) (data []byte, err error) {
-	prot, flags := protFlags(p)
-	return mmap(fd, offset, length, prot, flags)
+func Open(fd int, offset int64, length int, p Prot) (data []byte, err error) {
+	prot, flags := ProtFlags(p)
+	return Mmap(fd, offset, length, prot, flags)
 }
 
 //Mmap calls the mmap system call.

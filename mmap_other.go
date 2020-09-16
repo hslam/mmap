@@ -13,7 +13,7 @@ import (
 	"unsafe"
 )
 
-func protFlags(p PROT) (prot int, flags int) {
+func protFlags(p Prot) (prot int, flags int) {
 	return 0, 0
 }
 
@@ -62,8 +62,8 @@ func (m *mmapper) Msync(b []byte) (err error) {
 	}
 	p := &b[cap(b)-1]
 	m.Lock()
-	defer m.Unlock()
 	f := m.active[p]
+	m.Unlock()
 	if f == nil || f.buf == nil || &f.buf[0] != &b[0] {
 		return syscall.EINVAL
 	}
@@ -80,8 +80,8 @@ func (m *mmapper) Munmap(data []byte) (err error) {
 	}
 	p := &data[cap(data)-1]
 	m.Lock()
-	defer m.Unlock()
 	f := m.active[p]
+	m.Unlock()
 	if f == nil || f.buf == nil || &f.buf[0] != &data[0] {
 		return syscall.EINVAL
 	}
@@ -89,7 +89,9 @@ func (m *mmapper) Munmap(data []byte) (err error) {
 	syscall.Seek(f.fd, 0, os.SEEK_SET)
 	_, err = syscall.Write(f.fd, data)
 	syscall.Seek(f.fd, cursor, os.SEEK_SET)
+	m.Lock()
 	delete(m.active, p)
+	m.Unlock()
 	f = nil
 	return err
 }

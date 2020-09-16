@@ -9,6 +9,7 @@ import (
 )
 
 func TestMmap(t *testing.T) {
+	ProtFlags(READ | WRITE | COPY | EXEC)
 	name := "mmap"
 	file, err := os.Create(name)
 	if err != nil {
@@ -16,12 +17,11 @@ func TestMmap(t *testing.T) {
 	}
 	defer os.Remove(name)
 	defer file.Close()
-	offset := int64(os.Getpagesize() * 4)
+	offset := Offset(int64(os.Getpagesize() * 4))
 	size := 11
 	file.Truncate(int64(size) + offset)
 	file.Sync()
-	prot, flags := ProtFlags(READ | WRITE)
-	m, err := Mmap(Fd(file), offset, size, prot, flags)
+	m, err := Open(Fd(file), offset, Fsize(file), READ|WRITE)
 	if err != nil {
 		t.Error(err)
 	}
@@ -39,6 +39,7 @@ func TestMmap(t *testing.T) {
 	if err := Munmap(m); err != nil {
 		t.Error(err)
 	}
+	Msync(m)
 	file.Sync()
 }
 

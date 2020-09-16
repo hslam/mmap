@@ -1,4 +1,7 @@
 # mmap
+[![GoDoc](https://godoc.org/github.com/hslam/mmap?status.svg)](https://godoc.org/github.com/hslam/mmap)
+[![LICENSE](https://img.shields.io/github/license/hslam/timer.svg?style=flat-square)](https://github.com/hslam/timer/blob/master/LICENSE)
+
 Package mmap provides a way to memory-map a file.
 
 ## Get started

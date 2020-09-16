@@ -20,7 +20,7 @@ const (
 	MAP_COPY    = MAP_PRIVATE
 )
 
-func protFlags(p PROT) (prot int, flags int) {
+func protFlags(p Prot) (prot int, flags int) {
 	prot = PROT_READ
 	flags = MAP_SHARED
 	if p&WRITE != 0 {
