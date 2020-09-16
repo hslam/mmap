@@ -37,18 +37,15 @@ func main() {
 	defer os.Remove(name)
 	defer file.Close()
 	str := "Hello world"
-	length := len(str)
-	file.Truncate(int64(length))
-	file.Sync()
-	b, err := mmap.Open(int(file.Fd()), 0, length, mmap.READ|mmap.WRITE)
+	file.Truncate(int64(len(str)))
+	b, err := mmap.Open(int(file.Fd()), 0, len(str), mmap.READ|mmap.WRITE)
 	if err != nil {
 		panic(err)
 	}
+	defer mmap.Munmap(b)
 	copy(b, []byte(str))
 	mmap.Msync(b)
-	mmap.Munmap(b)
-	file.Sync()
-	buf := make([]byte, length)
+	buf := make([]byte, len(str))
 	if n, err := file.Read(buf); err != nil {
 		fmt.Println(err)
 	} else {
