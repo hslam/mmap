@@ -1,5 +1,5 @@
 # mmap
-[![GoDoc](https://godoc.org/github.com/hslam/mmap?status.svg)](https://godoc.org/github.com/hslam/mmap)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/hslam/mmap)](https://pkg.go.dev/github.com/hslam/mmap)
 [![Build Status](https://travis-ci.org/hslam/mmap.svg?branch=master)](https://travis-ci.org/hslam/mmap)
 [![codecov](https://codecov.io/gh/hslam/mmap/branch/master/graph/badge.svg)](https://codecov.io/gh/hslam/mmap)
 [![Go Report Card](https://goreportcard.com/badge/github.com/hslam/mmap?v=7e100)](https://goreportcard.com/report/github.com/hslam/mmap)
@@ -63,7 +63,7 @@ Hello world
 This package is licensed under a MIT license (Copyright (c) 2020 Meng Huang)
 
 
-### Authors
+### Author
 mmap was written by Meng Huang.
 
 
