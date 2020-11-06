@@ -19,7 +19,7 @@ import "github.com/hslam/mmap"
 ```
 ### Usage
 #### Example
-```
+```go
 package main
 
 import (
