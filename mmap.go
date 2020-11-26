@@ -41,12 +41,6 @@ func ProtFlags(p Prot) (prot int, flags int) {
 	return protFlags(p)
 }
 
-// Offset returns the valid offset.
-func Offset(offset int64) int64 {
-	pageSize := int64(os.Getpagesize())
-	return offset / pageSize * pageSize
-}
-
 // Open opens a mmap
 func Open(fd int, offset int64, length int, p Prot) (data []byte, err error) {
 	prot, flags := ProtFlags(p)

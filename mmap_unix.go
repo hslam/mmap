@@ -6,6 +6,7 @@
 package mmap
 
 import (
+	"os"
 	"syscall"
 	"unsafe"
 )
@@ -19,6 +20,12 @@ const (
 	MAP_PRIVATE = syscall.MAP_PRIVATE
 	MAP_COPY    = MAP_PRIVATE
 )
+
+// Offset returns the valid offset.
+func Offset(offset int64) int64 {
+	pageSize := int64(os.Getpagesize())
+	return offset / pageSize * pageSize
+}
 
 func protFlags(p Prot) (prot int, flags int) {
 	prot = PROT_READ

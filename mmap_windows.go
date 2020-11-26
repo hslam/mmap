@@ -6,6 +6,7 @@
 package mmap
 
 import (
+	"os"
 	"sync"
 	"syscall"
 	"unsafe"
@@ -24,6 +25,12 @@ const (
 	FILE_MAP_READ    = syscall.FILE_MAP_READ
 	FILE_MAP_EXECUTE = syscall.FILE_MAP_EXECUTE
 )
+
+// Offset returns the valid offset.
+func Offset(offset int64) int64 {
+	pageSize := int64(os.Getpagesize() * 16)
+	return offset / pageSize * pageSize
+}
 
 func protFlags(p Prot) (prot int, flags int) {
 	prot = PAGE_READONLY

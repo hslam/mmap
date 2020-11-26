@@ -13,6 +13,12 @@ import (
 	"unsafe"
 )
 
+// Offset returns the valid offset.
+func Offset(offset int64) int64 {
+	pageSize := int64(os.Getpagesize())
+	return offset / pageSize * pageSize
+}
+
 func protFlags(p Prot) (prot int, flags int) {
 	return 0, 0
 }

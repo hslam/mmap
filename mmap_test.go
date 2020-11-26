@@ -17,11 +17,14 @@ func TestMmap(t *testing.T) {
 	}
 	defer os.Remove(name)
 	defer file.Close()
-	offset := Offset(int64(os.Getpagesize() * 4))
+	offset := Offset(int64(os.Getpagesize() * 64))
 	size := 11
 	file.Truncate(int64(size) + offset)
 	file.Sync()
-	m, err := Open(Fd(file), offset, Fsize(file), READ|WRITE)
+	if Fsize(file) != size+int(offset) {
+		t.Error(Fsize(file), size+int(offset))
+	}
+	m, err := Open(Fd(file), offset, size, READ|WRITE)
 	if err != nil {
 		t.Error(err)
 	}
