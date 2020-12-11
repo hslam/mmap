@@ -62,7 +62,6 @@ func (m *mmapper) Mmap(fd int, offset int64, length int, prot int, flags int) (d
 	}
 	pool := assignPool(length)
 	buf := pool.Get().([]byte)
-	defer pool.Put(buf)
 	cursor, _ := syscall.Seek(fd, 0, os.SEEK_CUR)
 	syscall.Seek(fd, offset, os.SEEK_SET)
 	n, err := syscall.Read(fd, buf)
@@ -122,6 +121,8 @@ func (m *mmapper) Munmap(data []byte) (err error) {
 	m.Lock()
 	delete(m.active, p)
 	m.Unlock()
+	pool := assignPool(cap(f.buf))
+	pool.Put(f.buf)
 	f = nil
 	return err
 }
