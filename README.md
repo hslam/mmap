@@ -1,6 +1,6 @@
 # mmap
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/hslam/mmap)](https://pkg.go.dev/github.com/hslam/mmap)
-[![Build Status](https://travis-ci.org/hslam/mmap.svg?branch=master)](https://travis-ci.org/hslam/mmap)
+[![Build Status](https://api.travis-ci.com/hslam/mmap.svg?branch=master)](https://travis-ci.com/hslam/mmap)
 [![codecov](https://codecov.io/gh/hslam/mmap/branch/master/graph/badge.svg)](https://codecov.io/gh/hslam/mmap)
 [![Go Report Card](https://goreportcard.com/badge/github.com/hslam/mmap?v=7e100)](https://goreportcard.com/report/github.com/hslam/mmap)
 [![LICENSE](https://img.shields.io/github/license/hslam/mmap.svg?style=flat-square)](https://github.com/hslam/mmap/blob/master/LICENSE)
